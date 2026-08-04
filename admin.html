@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta property="og:image" content="https://putra939.github.io/Undangan_Nikah_NETFLIX/foto1.jpg">
+<title>UndanganKu — Admin Panel</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root {
+    --bg: #F6F1E9;
+    --surface: #FFFFFF;
+    --ink: #2A2420;
+    --ink-soft: #4A3F36;
+    --muted: #8B7E72;
+    --line: #E8DECF;
+    --line-soft: #F0E7D6;
+    --accent: #B8956A;
+    --accent-dark: #9A7B52;
+    --accent-soft: #F4EAD8;
+    --success: #6B8E5A;
+    --danger: #C26B5A;
+  }
+  * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  body {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    background-image: 
+      radial-gradient(circle at 0% 0%, rgba(184,149,106,0.08) 0%, transparent 35%),
+      radial-gradient(circle at 100% 100%, rgba(184,149,106,0.06) 0%, transparent 40%);
+    background-attachment: fixed;
+  }
+  .font-display { font-family: 'Fraunces', Georgia, serif; }
+  
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #D4C4A8; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+  
+  .tab-panel { animation: fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .field-input, .field-textarea, .field-select {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 11px 14px;
+    font-size: 14px;
+    transition: all 0.2s;
+    color: var(--ink);
+    font-family: inherit;
+  }
+  .field-textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
+  .field-input:focus, .field-textarea:focus, .field-select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(184, 149, 106, 0.14);
+    background: #FFFEFB;
+  }
+  .field-input::placeholder, .field-textarea::placeholder { color: #B8AC9C; }
+  
+  .btn-primary {
+    background: var(--ink);
+    color: #F6F1E9;
+    padding: 11px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--ink);
+  }
+  .btn-primary:hover { background: #1A1510; transform: translateY(-1px); box-shadow: 0 8px 20px -8px rgba(42,36,32,0.4); }
+  
+  .btn-ghost {
+    background: var(--surface);
+    color: var(--ink-soft);
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s;
+    border: 1px solid var(--line);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-ghost:hover { background: var(--accent-soft); border-color: var(--accent); color: var(--ink); }
+  .btn-icon {
+    width: 34px; height: 34px; padding: 0; justify-content: center;
+  }
+  
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: 1px solid transparent;
+  }
+  .nav-item:hover { background: var(--accent-soft); color: var(--ink); }
+  .nav-item.active {
+    background: var(--ink);
+    color: #F6F1E9;
+  }
+  .nav-item.active .nav-count { background: var(--accent); color: white; }
+  .nav-count {
+    margin-left: auto;
+    background: var(--line);
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 10px;
+    min-width: 22px;
+    text-align: center;
+  }
+  
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    transition: border-color 0.2s;
+  }
+  
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--ink);
+    color: #F6F1E9;
+    padding: 13px 18px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 500;
+    box-shadow: 0 20px 40px -10px rgba(0,0,0,0.25);
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    pointer-events: none;
+  }
+  .toast.show {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  
+  .guest-row { transition: background 0.15s; }
+  .guest-row:hover { background: #FBF7EF; }
+  
+  @keyframes pulse-soft {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.85); }
+  }
+  .pulse-dot { animation: pulse-soft 2s infinite; }
+  
+  .link-card {
+    background: linear-gradient(135deg, #FFFDF8 0%, #FBF4E8 100%);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    transition: all 0.2s;
+  }
+  .link-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px -10px rgba(184,149,106,0.3);
+  }
+  
+  .logo-mark {
+    width: 38px;
+    height: 38px;
+    background: var(--ink);
+    border-radius: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 19px;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .logo-mark::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border: 1px solid var(--accent);
+    border-radius: 14px;
+    opacity: 0.35;
+  }
+  
+  .pattern-dots {
+    background-image: radial-gradient(circle at 1px 1px, rgba(184,149,106,0.18) 1px, transparent 0);
+    background-size: 22px 22px;
+  }
+  
+  /* Mobile */
+  @media (max-width: 900px) {
+    .sidebar { 
+      position: fixed; left: -280px; top: 0; bottom: 0; 
+      z-index: 50; transition: left 0.3s;
+      box-shadow: 4px 0 30px rgba(0,0,0,0.1);
+    }
+    .sidebar.open { left: 0; }
+    .mobile-menu-btn { display: flex !important; }
+    .main-content { margin-left: 0 !important; }
+    .stats-grid { grid-template-columns: 1fr !important; }
+  }
+</style>
+</head>
+<body>
+  <div class="flex min-h-screen">
+    
+    <!-- SIDEBAR -->
+    <aside class="sidebar w-[260px] border-r border-[var(--line)] bg-[var(--surface)] flex flex-col p-5 sticky top-0 h-screen flex-shrink-0">
+      <div class="flex items-center gap-3 mb-8">
+        <div class="logo-mark">U</div>
+        <div>
+          <div class="font-display text-lg font-semibold leading-none">UndanganKu</div>
+          <div class="text-[11px] text-[var(--muted)] mt-1.5 tracking-wide">ADMIN PANEL</div>
+        </div>
+      </div>
+      
+      <nav class="flex-1">
+        <div class="text-[10px] uppercase tracking-wider text-[var(--muted)] font-semibold px-3 mb-2">Persiapan</div>
+        <div class="space-y-1">
+          <div class="nav-item active" data-tab="mempelai">
+            <i class="fa-regular fa-heart w-4 text-center"></i>
+            <span>Mempelai & Ucapan</span>
+          </div>
+          <div class="nav-item" data-tab="tamu">
+            <i class="fa-regular fa-address-book w-4 text-center"></i>
+            <span>Daftar Tamu</span>
+            <span class="nav-count" id="navGuestCount">0</span>
+          </div>
+          <div class="nav-item" data-tab="link">
+            <i class="fa-regular fa-share-from-square w-4 text-center"></i>
+            <span>Link Undangan</span>
+          </div>
+        </div>
+      </nav>
+      
+      <div class="mt-6 p-4 rounded-xl bg-[var(--accent-soft)] border border-[var(--line)]">
+        <div class="flex items-center gap-2 mb-1.5">
+          <span class="w-2 h-2 rounded-full bg-[var(--success)] pulse-dot"></span>
+          <span class="text-xs font-semibold">Tersimpan Otomatis</span>
+        </div>
+        <p class="text-[11px] text-[var(--muted)] leading-relaxed">Data tersimpan otomatis di browser ini.</p>
+      </div>
+    </aside>
+    
+    <!-- MAIN -->
+    <main class="main-content flex-1 overflow-x-hidden min-w-0">
+      <!-- Top bar -->
+      <header class="border-b border-[var(--line)] bg-[var(--surface)]/85 backdrop-blur-md px-6 lg:px-10 py-5 flex items-center justify-between sticky top-0 z-30 gap-4">
+        <div class="flex items-center gap-3 min-w-0">
+          <button class="mobile-menu-btn hidden w-9 h-9 rounded-lg border border-[var(--line)] items-center justify-center text-[var(--ink)]" onclick="toggleSidebar()">
+            <i class="fa-solid fa-bars text-sm"></i>
+          </button>
+          <div class="min-w-0">
+            <div class="text-xs text-[var(--muted)] mb-1 truncate" id="breadcrumb">Persiapan / Mempelai & Ucapan</div>
+            <h1 class="font-display text-xl lg:text-2xl font-semibold truncate" id="pageTitle">Mempelai & Kalimat Ucapan</h1>
+          </div>
+        </div>
+        <div class="hidden sm:flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--accent-soft)] border border-[var(--line)]">
+          <span class="w-2 h-2 rounded-full bg-[var(--success)] pulse-dot"></span>
+          <span class="text-xs font-medium text-[var(--ink-soft)]">Auto-save aktif</span>
+        </div>
+      </header>
+      
+      <div class="p-6 lg:p-10">
+        <div class="max-w-4xl">
+          
+          <!-- TAB 1: MEMPELAI -->
+          <section class="tab-panel" id="tab-mempelai">
+            <div class="mb-7">
+              <p class="text-[var(--muted)] text-sm leading-relaxed max-w-2xl">Atur informasi mempelai dan kalimat ucapan untuk undangan. Semua ini akan ditampilkan di halaman undangan digital yang dibuka oleh tamu.</p>
+            </div>
+            
+            <div class="space-y-5">
+              <!-- Mempelai -->
+              <div class="card p-7">
+                <div class="flex items-center gap-3 mb-6">
+                  <div class="w-9 h-9 rounded-lg bg-[var(--accent-soft)] flex items-center justify-center text-[var(--accent)]">
+                    <i class="fa-solid fa-heart text-sm"></i>
+                  </div>
+                  <div>
+                    <h2 class="font-display text-lg font-semibold leading-tight">Nama Mempelai</h2>
+                    <p class="text-xs text-[var(--muted)] mt-0.5">Identitas pasangan yang akan menikah</p>
+                  </div>
+                </div>
+                
+                <div class="grid sm:grid-cols-2 gap-4">
+                  <div>
+                    <label class="text-xs font-semibold text-[var(--muted)] uppercase tracking-wider mb-2 block">Mempelai Pria</label>
+                    <input type="text" id="groomName" class="field-input" placeholder="Budi Santoso" />
+                  </div>
+                  <div>
+                    <label class="text-xs font-semibold text-[var(--muted)] uppercase tracking-wider mb-2 block">Mempelai Wanita</label>
+                    <input type="text" id="brideName" class="field-input" placeholder="Siti Rahma" />
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Kalimat Ucapan (Gabungan) -->
+              <div class="card p-7">
+                <div class="flex items-center gap-3 mb-6">
+                  <div class="w-9 h-9 rounded-lg bg-[var(--accent-soft)] flex items-center justify-center text-[var(--accent)]">
+                    <i class="fa-regular fa-message text-sm"></i>
+                  </div>
+                  <div>
+                    <h2 class="font-display text-lg font-semibold leading-tight">Kalimat Ucapan</h2>
+                    <p class="text-xs text-[var(--muted)] mt-0.5">Tulis pembuka, isi, dan penutup undangan dalam satu teks</p>
+                  </div>
+                </div>
+                
+                <div>
+                  <div class="flex items-center justify-between mb-2">
+                    <label class="text-xs font-semibold text-[var(--muted)] uppercase tracking-wider">Isi Kalimat Ucapan</label>
+                    <span class="text-xs text-[var(--muted)]"><span id="charCount">0</span> / 800</span>
+                  </div>
+                  <textarea id="invitationMessage" rows="10" class="field-textarea" placeholder="Kepada Yth: [NAMA_TAMU]
+
+Dengan memohon rahmat dan ridho Tuhan Yang Maha Esa, kami bermaksud mengundang Bapak/Ibu/Saudara/i untuk hadir pada acara pernikahan kami.
+
+[NAMA_MEMPELAI]
+
+Klik link berikut untuk melihat undangan:
+[LINK_UNDANGAN]
+
+Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila berkenan hadir dan memberikan doa restu."></textarea>
+                  <p class="text-xs text-[var(--muted)] mt-2 flex items-start gap-1.5">
+                    <i class="fa-regular fa-lightbulb mt-0.5"></i>
+                    <span>Gunakan placeholder <strong>[NAMA_TAMU]</strong>, <strong>[NAMA_MEMPELAI]</strong>, dan <strong>[LINK_UNDANGAN]</strong> di dalam teks untuk menentukan posisinya. Jika tidak digunakan, akan otomatis ditambahkan di akhir teks.</span>
+                  </p>
+                </div>
+              </div>
+              
+              <div class="flex justify-end gap-3 pt-2">
+                <button class="btn-ghost" onclick="resetMempelaiForm()">
+                  <i class="fa-regular fa-rotate-left"></i>
+                  <span>Reset Form</span>
+                </button>
+                <button class="btn-primary" onclick="saveMempelai()">
+                  <i class="fa-regular fa-check"></i>
+                  <span>Simpan Perubahan</span>
+                </button>
+              </div>
+            </div>
+          </section>
+          
+          <!-- TAB 2: TAMU -->
+          <section class="tab-panel hidden" id="tab-tamu">
+            <div class="mb-7">
+              <p class="text-[var(--muted)] text-sm leading-relaxed max-w-2xl">Tambahkan daftar nama tamu. Setiap tamu akan otomatis mendapatkan link undangan personal yang menampilkan nama mereka saat dibuka.</p>
+            </div>
+            
+            <div class="stats-grid grid grid-cols-3 gap-4 mb-6">
+              <div class="card p-5">
+                <div class="text-[10px] text-[var(--muted)] uppercase tracking-wider mb-1.5 font-semibold">Total Tamu</div>
+                <div class="font-display text-3xl font-semibold" id="statTotal">0</div>
+              </div>
+              <div class="card p-5">
+                <div class="text-[10px] text-[var(--muted)] uppercase tracking-wider mb-1.5 font-semibold">Link Personal</div>
+                <div class="font-display text-3xl font-semibold" id="statLink">0</div>
+              </div>
+              <div class="card p-5">
+                <div class="text-[10px] text-[var(--muted)] uppercase tracking-wider mb-1.5 font-semibold">Terkirim</div>
+                <div class="font-display text-3xl font-semibold" id="statSent">0</div>
+              </div>
+            </div>
+            
+            <div class="card p-7 mb-6">
+              <div class="flex items-center gap-3 mb-5">
+                <div class="w-9 h-9 rounded-lg bg-[var(--accent-soft)] flex items-center justify-center text-[var(--accent)]">
+                  <i class="fa-solid fa-plus text-sm"></i>
+                </div>
+                <div>
+                  <h2 class="font-display text-lg font-semibold leading-tight">Tambah Tamu</h2>
+                  <p class="text-xs text-[var(--muted)] mt-0.5">Bisa tambah banyak nama sekaligus</p>
+                </div>
+              </div>
+              
+              <div class="mb-4">
+                <label class="text-xs font-semibold text-[var(--muted)] uppercase tracking-wider mb-2 block">Daftar Nama Tamu</label>
+                <textarea id="bulkGuestInput" rows="5" class="field-textarea" placeholder="Masukkan satu nama per baris, contoh:&#10;Keluarga Bapak Andi Wijaya&#10;Ibu Rina Suryani&#10;Saudara Dimas Pratama"></textarea>
+                <p class="text-xs text-[var(--muted)] mt-2 flex items-center gap-1.5">
+                  <i class="fa-regular fa-lightbulb"></i>
+                  Pisahkan setiap nama dengan baris baru (tekan Enter)
+                </p>
+              </div>
+              
+              <div class="flex justify-end gap-3">
+                <button class="btn-ghost" onclick="clearBulk()">
+                  <span>Bersihkan</span>
+                </button>
+                <button class="btn-primary" onclick="addBulkGuests()">
+                  <i class="fa-regular fa-plus"></i>
+                  <span>Tambahkan Tamu</span>
+                </button>
+              </div>
+            </div>
+            
+            <div class="card overflow-hidden">
+              <div class="p-6 border-b border-[var(--line)] flex items-center justify-between gap-4 flex-wrap">
+                <div>
+                  <h2 class="font-display text-lg font-semibold leading-tight">Daftar Tamu</h2>
+                  <p class="text-xs text-[var(--muted)] mt-0.5">Kelola tamu dan link undangan</p>
+                </div>
+                <div class="relative w-full sm:w-72">
+                  <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-[var(--muted)] text-xs"></i>
+                  <input type="text" id="searchGuest" class="field-input pl-9" placeholder="Cari nama tamu..." />
+                </div>
+              </div>
+              
+              <div class="overflow-x-auto">
+                <table class="w-full">
+                  <thead>
+                    <tr class="bg-[#FBF7EF] text-left">
+                      <th class="text-[10px] font-semibold text-[var(--muted)] uppercase tracking-wider px-6 py-3 w-12">#</th>
+                      <th class="text-[10px] font-semibold text-[var(--muted)] uppercase tracking-wider px-6 py-3">Nama Tamu</th>
+                      <th class="text-[10px] font-semibold text-[var(--muted)] uppercase tracking-wider px-6 py-3">Kode</th>
+                      <th class="text-[10px] font-semibold text-[var(--muted)] uppercase tracking-wider px-6 py-3">Status</th>
+                      <th class="text-[10px] font-semibold text-[var(--muted)] uppercase tracking-wider px-6 py-3 text-right">Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody id="guestTableBody"></tbody>
+                </table>
+                
+                <div id="guestEmpty" class="py-16 text-center">
+                  <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-[var(--accent-soft)] flex items-center justify-center text-[var(--accent)]">
+                    <i class="fa-regular fa-address-book text-2xl"></i>
+                  </div>
+                  <h3 class="font-display text-lg font-semibold mb-1">Belum ada tamu</h3>
+                  <p class="text-sm text-[var(--muted)]">Tambahkan nama tamu di atas untuk mulai membuat link undangan.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+          
+          <!-- TAB 3: LINK -->
+          <section class="tab-panel hidden" id="tab-link">
+            <div class="mb-7">
+              <p class="text-[var(--muted)] text-sm leading-relaxed max-w-2xl">Bagikan link undangan ke tamu. Link utama untuk umum, link personal otomatis menampilkan nama tamu saat dibuka.</p>
+            </div>
+            
+            <div class="card p-7 mb-6 relative overflow-hidden">
+              <div class="absolute -top-10 -right-10 w-48 h-48 pattern-dots opacity-60 pointer-events-none"></div>
+              <div class="relative">
+                <div class="flex items-center gap-3 mb-2">
+                  <div class="w-9 h-9 rounded-lg bg-[var(--accent-soft)] flex items-center justify-center text-[var(--accent)]">
+                    <i class="fa-solid fa-link text-sm"></i>
+                  </div>
+                  <div>
+                    <h2 class="font-display text-lg font-semibold leading-tight">Link Utama Undangan</h2>
+                    <p class="text-xs text-[var(--muted)] mt-0.5">Tanpa personalisasi nama tamu</p>
+                  </div>
+                </div>
+                
+                <div class="flex gap-2 mt-5">
+                  <input type="text" id="mainLink" class="field-input flex-1 font-mono text-sm" readonly />
+                  <button class="btn-primary" onclick="copyMainLink()">
+                    <i class="fa-regular fa-copy"></i>
+                    <span>Salin</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="card p-7">
+              <div class="flex items-center justify-between mb-5 flex-wrap gap-3">
+                <div>
+                  <h2 class="font-display text-lg font-semibold leading-tight">Link Personal per Tamu</h2>
+                  <p class="text-xs text-[var(--muted)] mt-0.5">Setiap link menampilkan nama tamu saat dibuka</p>
+                </div>
+                <button class="btn-ghost" onclick="copyAllLinks()">
+                  <i class="fa-regular fa-copy"></i>
+                  <span>Salin Semua</span>
+                </button>
+              </div>
+              
+              <div id="linkList" class="space-y-2.5"></div>
+              
+              <div id="linkEmpty" class="py-14 text-center">
+                <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-[var(--accent-soft)] flex items-center justify-center text-[var(--accent)]">
+                  <i class="fa-regular fa-share-from-square text-2xl"></i>
+                </div>
+                <h3 class="font-display text-lg font-semibold mb-1">Belum ada link personal</h3>
+                <p class="text-sm text-[var(--muted)]">Tambahkan tamu terlebih dahulu di tab Daftar Tamu.</p>
+                <button class="btn-ghost mt-4" onclick="switchTab('tamu')">
+                  <i class="fa-regular fa-arrow-left"></i>
+                  <span>Ke Daftar Tamu</span>
+                </button>
+              </div>
+            </div>
+          </section>
+          
+        </div>
+      </div>
+    </main>
+  </div>
+  
+  <!-- Toast -->
+  <div class="toast" id="toast">
+    <i class="fa-solid fa-check-circle text-[var(--success)]" id="toastIcon"></i>
+    <span id="toastMsg">Berhasil disimpan</span>
+  </div>
+  
+  <script>
+    // ============ STATE ============
+    const INVITE_URL = 'https://putra939.github.io/Undangan_Nikah_NETFLIX/';
+    
+    let state = {
+      mempelai: {
+        groom: '', bride: '',
+        message: ''
+      },
+      guests: []
+    };
+    
+    // ============ PERSISTENCE ============
+    function loadState() {
+      const saved = localStorage.getItem('undanganState');
+      if (saved) {
+        try { 
+          const parsed = JSON.parse(saved);
+          if (parsed.mempelai) {
+            const old = parsed.mempelai;
+            if (!old.message && (old.opening || old.closing || old.quote)) {
+              const parts = [];
+              if (old.opening) parts.push(old.opening);
+              if (old.closing) parts.push(old.closing);
+              if (old.quote) parts.push('"' + old.quote + '"');
+              old.message = parts.join('\n\n');
+            }
+          }
+          state = { 
+            mempelai: { 
+              groom: parsed.mempelai?.groom || '', 
+              bride: parsed.mempelai?.bride || '', 
+              message: parsed.mempelai?.message || ''
+            },
+            guests: parsed.guests || []
+          };
+        } catch(e) { console.warn('Load state failed', e); }
+      }
+    }
+    
+    function saveState() {
+      localStorage.setItem('undanganState', JSON.stringify(state));
+    }
+    
+    // ============ TABS ============
+    const tabs = ['mempelai', 'tamu', 'link'];
+    const tabTitles = {
+      mempelai: { title: 'Mempelai & Kalimat Ucapan', crumb: 'Persiapan / Mempelai & Ucapan' },
+      tamu: { title: 'Daftar Tamu Undangan', crumb: 'Persiapan / Daftar Tamu' },
+      link: { title: 'Link Undangan', crumb: 'Persiapan / Link Undangan' }
+    };
+    
+    document.querySelectorAll('.nav-item[data-tab]').forEach(item => {
+      item.addEventListener('click', () => switchTab(item.dataset.tab));
+    });
+    
+    function switchTab(tab) {
+      document.querySelectorAll('.nav-item[data-tab]').forEach(n => 
+        n.classList.toggle('active', n.dataset.tab === tab)
+      );
+      tabs.forEach(t => {
+        const panel = document.getElementById('tab-' + t);
+        if (t === tab) {
+          panel.classList.remove('hidden');
+          panel.style.animation = 'none';
+          panel.offsetHeight; // trigger reflow
+          panel.style.animation = '';
+        } else {
+          panel.classList.add('hidden');
+        }
+      });
+      document.getElementById('pageTitle').textContent = tabTitles[tab].title;
+      document.getElementById('breadcrumb').textContent = tabTitles[tab].crumb;
+      document.querySelector('.sidebar').classList.remove('open');
+    }
+    
+    function toggleSidebar() {
+      document.querySelector('.sidebar').classList.toggle('open');
+    }
+    
+    // ============ MEMPELAI ============
+    const messageEl = document.getElementById('invitationMessage');
+    messageEl.addEventListener('input', () => {
+      const len = messageEl.value.length;
+      document.getElementById('charCount').textContent = Math.min(len, 800);
+      if (len > 800) {
+        messageEl.value = messageEl.value.slice(0, 800);
+      }
+    });
+    
+    function saveMempelai() {
+      state.mempelai.groom = document.getElementById('groomName').value.trim();
+      state.mempelai.bride = document.getElementById('brideName').value.trim();
+      state.mempelai.message = document.getElementById('invitationMessage').value.trim();
+      saveState();
+      showToast('Data mempelai tersimpan', 'check-circle');
+    }
+    
+    function resetMempelaiForm() {
+      document.getElementById('groomName').value = '';
+      document.getElementById('brideName').value = '';
+      document.getElementById('invitationMessage').value = '';
+      document.getElementById('charCount').textContent = '0';
+      showToast('Form dibersihkan. Klik Simpan untuk menyimpan.', 'circle-info');
+    }
+    
+    // ============ GUESTS ============
+    function generateCode() {
+      const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+      let code = '';
+      for (let i = 0; i < 6; i++) {
+        code += chars[Math.floor(Math.random() * chars.length)];
+      }
+      return code;
+    }
+    
+    function addBulkGuests() {
+      const text = document.getElementById('bulkGuestInput').value;
+      const names = text.split('\n').map(n => n.trim()).filter(Boolean);
+      if (names.length === 0) {
+        showToast('Masukkan minimal satu nama tamu', 'circle-exclamation');
+        return;
+      }
+      names.forEach(name => {
+        state.guests.push({
+          id: 'g_' + Date.now() + '_' + Math.random().toString(36).slice(2,8),
+          name: name,
+          code: generateCode(),
+          sent: false,
+          addedAt: Date.now()
+        });
+      });
+      document.getElementById('bulkGuestInput').value = '';
+      saveState();
+      renderGuests();
+      renderLinks();
+      showToast(names.length + ' tamu berhasil ditambahkan', 'check-circle');
+    }
+    
+    function clearBulk() {
+      document.getElementById('bulkGuestInput').value = '';
+    }
+    
+    function deleteGuest(id) {
+      state.guests = state.guests.filter(g => g.id !== id);
+      saveState();
+      renderGuests();
+      renderLinks();
+      showToast('Tamu dihapus', 'trash');
+    }
+    
+    function toggleSent(id) {
+      const g = state.guests.find(g => g.id === id);
+      if (g) {
+        g.sent = !g.sent;
+        saveState();
+        renderGuests();
+        renderLinks();
+        showToast(g.sent ? 'Ditandai terkirim' : 'Status direset', 'check-circle');
+      }
+    }
+    
+    function renderGuests() {
+      const tbody = document.getElementById('guestTableBody');
+      const empty = document.getElementById('guestEmpty');
+      const search = document.getElementById('searchGuest').value.toLowerCase().trim();
+      
+      const filtered = state.guests.filter(g => g.name.toLowerCase().includes(search));
+      
+      document.getElementById('navGuestCount').textContent = state.guests.length;
+      document.getElementById('statTotal').textContent = state.guests.length;
+      document.getElementById('statLink').textContent = state.guests.length;
+      document.getElementById('statSent').textContent = state.guests.filter(g => g.sent).length;
+      
+      if (filtered.length === 0) {
+        tbody.innerHTML = '';
+        empty.style.display = 'block';
+        const h3 = empty.querySelector('h3');
+        const p = empty.querySelector('p');
+        if (state.guests.length > 0 && search) {
+          h3.textContent = 'Tidak ditemukan';
+          p.textContent = 'Coba kata kunci lain untuk mencari tamu.';
+        } else {
+          h3.textContent = 'Belum ada tamu';
+          p.textContent = 'Tambahkan nama tamu di atas untuk mulai membuat link undangan.';
+        }
+        return;
+      }
+      
+      empty.style.display = 'none';
+      tbody.innerHTML = filtered.map((g, i) => `
+        <tr class="guest-row border-t border-[var(--line-soft)]">
+          <td class="px-6 py-4 text-sm text-[var(--muted)]">${i + 1}</td>
+          <td class="px-6 py-4">
+            <div class="font-medium text-[var(--ink)]">${escapeHtml(g.name)}</div>
+          </td>
+          <td class="px-6 py-4">
+            <span class="font-mono text-xs px-2 py-1 rounded-md bg-[var(--accent-soft)] text-[var(--accent-dark)] font-semibold">${g.code}</span>
+          </td>
+          <td class="px-6 py-4">
+            ${g.sent 
+              ? '<span class="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--success)]"><span class="w-1.5 h-1.5 rounded-full bg-[var(--success)]"></span>Terkirim</span>'
+              : '<span class="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--muted)]"><span class="w-1.5 h-1.5 rounded-full bg-[var(--muted)]"></span>Belum</span>'}
+          </td>
+          <td class="px-6 py-4">
+            <div class="flex items-center justify-end gap-1">
+              <button class="btn-ghost btn-icon" onclick="copyPersonalLink('${g.id}')" title="Salin link">
+                <i class="fa-regular fa-copy text-xs"></i>
+              </button>
+              <button class="btn-ghost btn-icon" onclick="shareWhatsApp('${g.id}')" title="Kirim via WhatsApp">
+                <i class="fa-brands fa-whatsapp text-sm text-[var(--success)]"></i>
+              </button>
+              <button class="btn-ghost btn-icon" onclick="toggleSent('${g.id}')" title="Tandai terkirim">
+                <i class="fa-regular fa-check text-xs"></i>
+              </button>
+              <button class="btn-ghost btn-icon hover:!border-[var(--danger)] hover:!text-[var(--danger)]" onclick="deleteGuest('${g.id}')" title="Hapus">
+                <i class="fa-regular fa-trash text-xs"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+    
+    // ============ LINKS ============
+    function renderLinks() {
+      const list = document.getElementById('linkList');
+      const empty = document.getElementById('linkEmpty');
+      
+      document.getElementById('mainLink').value = INVITE_URL;
+      
+      if (state.guests.length === 0) {
+        list.innerHTML = '';
+        empty.style.display = 'block';
+        return;
+      }
+      
+      empty.style.display = 'none';
+      list.innerHTML = state.guests.map(g => {
+        const link = `${INVITE_URL}/?to=${g.code}`;
+        return `
+          <div class="link-card p-4 flex items-center gap-4">
+            <div class="w-10 h-10 rounded-full bg-[var(--accent-soft)] flex items-center justify-center text-[var(--accent-dark)] font-display font-semibold flex-shrink-0">
+              ${escapeHtml(g.name.charAt(0).toUpperCase())}
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="font-medium text-sm truncate flex items-center gap-2">
+                ${escapeHtml(g.name)}
+                ${g.sent ? '<span class="inline-flex items-center gap-1 text-[10px] font-semibold text-[var(--success)]"><span class="w-1.5 h-1.5 rounded-full bg-[var(--success)]"></span>Terkirim</span>' : ''}
+              </div>
+              <div class="text-xs text-[var(--muted)] font-mono truncate mt-0.5">${link}</div>
+            </div>
+            <div class="flex items-center gap-1 flex-shrink-0">
+              <button class="btn-ghost btn-icon" onclick="copyPersonalLink('${g.id}')" title="Salin link">
+                <i class="fa-regular fa-copy text-xs"></i>
+              </button>
+              <button class="btn-ghost btn-icon" onclick="shareWhatsApp('${g.id}')" title="Bagikan via WhatsApp">
+                <i class="fa-brands fa-whatsapp text-sm text-[var(--success)]"></i>
+              </button>
+              <button class="btn-ghost btn-icon" onclick="openLink('${g.id}')" title="Buka link">
+                <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+    
+    function copyMainLink() {
+      navigator.clipboard.writeText(INVITE_URL).then(() => {
+        showToast('Link utama tersalin ke clipboard', 'check-circle');
+      }).catch(() => {
+        showToast('Gagal menyalin link', 'circle-exclamation');
+      });
+    }
+    
+    function copyPersonalLink(id) {
+      const g = state.guests.find(g => g.id === id);
+      if (!g) return;
+      const link = `${INVITE_URL}/?to=${g.code}`;
+      navigator.clipboard.writeText(link).then(() => {
+        showToast('Link untuk ' + g.name + ' tersalin', 'check-circle');
+      });
+    }
+    
+    function copyAllLinks() {
+      if (state.guests.length === 0) {
+        showToast('Belum ada tamu untuk disalin', 'circle-exclamation');
+        return;
+      }
+      const text = state.guests.map(g => `${g.name}: ${INVITE_URL}/?to=${g.code}`).join('\n');
+      navigator.clipboard.writeText(text).then(() => {
+        showToast(state.guests.length + ' link tersalin ke clipboard', 'check-circle');
+      });
+    }
+    
+    function shareWhatsApp(id) {
+      const g = state.guests.find(g => g.id === id);
+      if (!g) return;
+      
+      const link = `${INVITE_URL}/?to=${g.code}`;
+      const m = state.mempelai;
+      const couple = (m.groom || m.bride) ? `${m.groom} & ${m.bride}`.trim().replace(/^&\s|&$/g, '') : 'Kami';
+      
+      let msg = m.message || 'Dengan memohon rahmat dan ridho Tuhan Yang Maha Esa, kami mengundang Anda untuk hadir di acara pernikahan kami.';
+      
+      const hasGuestTag = msg.includes('[NAMA_TAMU]');
+      const hasCoupleTag = msg.includes('[NAMA_MEMPELAI]');
+      const hasLinkTag = msg.includes('[LINK_UNDANGAN]');
+      
+      msg = msg.replace(/\[NAMA_TAMU\]/g, g.name);
+      msg = msg.replace(/\[NAMA_MEMPELAI\]/g, couple);
+      msg = msg.replace(/\[LINK_UNDANGAN\]/g, link);
+      
+      if (!hasGuestTag) {
+        msg = `Kepada Yth: ${g.name}\n\n` + msg;
+      }
+      if (!hasCoupleTag) {
+        msg += `\n\n${couple}`;
+      }
+      if (!hasLinkTag) {
+        msg += `\n\nKlik link berikut untuk melihat undangan:\n${link}`;
+      }
+      
+      g.sent = true;
+      saveState();
+      renderGuests();
+      renderLinks();
+      
+      // Langsung buka WhatsApp dengan teks ucapan
+      window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+    
+    function openLink(id) {
+      const g = state.guests.find(g => g.id === id);
+      if (!g) return;
+      window.open(`${INVITE_URL}/?to=${g.code}`, '_blank');
+    }
+    
+    // ============ UTILS ============
+    function escapeHtml(s) {
+      const div = document.createElement('div');
+      div.textContent = s || '';
+      return div.innerHTML;
+    }
+    
+    let toastTimeout;
+    function showToast(msg, icon = 'check-circle') {
+      const t = document.getElementById('toast');
+      const iconEl = document.getElementById('toastIcon');
+      document.getElementById('toastMsg').textContent = msg;
+      iconEl.className = `fa-solid fa-${icon}`;
+      
+      if (icon.includes('exclamation')) {
+        iconEl.style.color = 'var(--danger)';
+      } else if (icon.includes('info')) {
+        iconEl.style.color = 'var(--accent)';
+      } else {
+        iconEl.style.color = 'var(--success)';
+      }
+      
+      t.classList.add('show');
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => t.classList.remove('show'), 3500);
+    }
+    
+    function renderAll() {
+      const m = state.mempelai;
+      document.getElementById('groomName').value = m.groom || '';
+      document.getElementById('brideName').value = m.bride || '';
+      document.getElementById('invitationMessage').value = m.message || '';
+      document.getElementById('charCount').textContent = (m.message || '').length;
+      renderGuests();
+      renderLinks();
+    }
+    
+    // ============ INIT ============
+    document.getElementById('searchGuest').addEventListener('input', renderGuests);
+    
+    loadState();
+    
+    // Pre-populate demo data if empty (first-time user)
+    if (state.guests.length === 0 && !state.mempelai.groom) {
+      state.mempelai = {
+        groom: 'Budi Santoso',
+        bride: 'Siti Rahma',
+        message: `Kepada Yth: [NAMA_TAMU]\n\nDengan memohon rahmat dan ridho Tuhan Yang Maha Esa, kami bermaksud mengundang Bapak/Ibu/Saudara/i untuk hadir pada acara pernikahan kami.\n\n[NAMA_MEMPELAI]\n\nKlik link berikut untuk melihat undangan:\n[LINK_UNDANGAN]\n\nMerupakan suatu kehormatan dan kebahagiaan bagi kami apabila berkenan hadir dan memberikan doa restu.`
+      };
+      state.guests = [
+        { id: 'g_demo1', name: 'Keluarga Bapak Andi Wijaya', code: 'AW1K5P', sent: true, addedAt: Date.now() },
+        { id: 'g_demo2', name: 'Ibu Rina Suryani', code: 'RS9X2M', sent: false, addedAt: Date.now() },
+        { id: 'g_demo3', name: 'Bapak Joko Susilo', code: 'JS4P7Q', sent: false, addedAt: Date.now() },
+        { id: 'g_demo4', name: 'Saudara Dimas Pratama', code: 'DP8K3R', sent: false, addedAt: Date.now() }
+      ];
+      saveState();
+    }
+    
+    renderAll();
+  </script>
+</body>
+</html>

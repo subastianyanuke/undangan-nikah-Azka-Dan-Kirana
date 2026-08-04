@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Undangan Pernikahan Azka & Kirana</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #1a1a1a;
+            --secondary: #8b7355;
+            --bg: #f5f1ea;
+            --white: #ffffff;
+        }
+        
+        * {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg);
+            color: var(--primary);
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .font-Display {
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        /* Smooth Scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Cover Section */
+        #cover {
+            background-image: url('https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1974&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        #cover::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.4);
+        }
+
+        /* Gallery Visual Journey */
+        .gallery-item {
+            transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        
+        .gallery-item:hover {
+            transform: scale(1.02);
+        }
+
+        /* Animasi Fade Up on Scroll */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Audio Button */
+        .audio-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--secondary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            animation: spin 4s linear infinite;
+            animation-play-state: paused;
+        }
+
+        .audio-btn.playing {
+            animation-play-state: running;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Floating Animation */
+        .float {
+            animation: floating 3s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Audio Button -->
+    <div class="audio-btn" id="audioBtn" onclick="toggleAudio()">
+        <i class="fas fa-music"></i>
+    </div>
+    <audio id="bgMusic" loop>
+        <source src="her_spotdown.org.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- COVER / HOME SECTION -->
+    <section id="cover" class="h-screen w-full flex flex-col items-center justify-center text-white relative">
+        <div class="text-center z-10 px-6">
+            <p class="uppercase tracking-[0.3em] text-xs md:text-sm mb-4 font-light">The Wedding Of</p>
+            <h1 class="text-5xl md:text-7xl font-Display font-medium leading-tight mb-6">
+                Azka <span class="text-[#d4af37]">&</span><br> Kirana
+            </h1>
+            <p class="font-light text-sm md:text-base mb-8 tracking-wider">Kepada Yth. Bapak/Ibu/Saudara/i</p>
+            
+            <button onclick="openInvitation()" class="border border-white/70 px-8 py-3 text-sm tracking-widest uppercase hover:bg-white hover:text-black transition-all duration-500">
+                Buka Undangan
+            </button>
+        </div>
+        
+        <div class="absolute bottom-6 text-white animate-bounce">
+            <i class="fas fa-chevron-down text-xl"></i>
+        </div>
+    </section>
+
+    <!-- MAIN CONTENT (Hidden initially) -->
+    <div id="mainContent" class="hidden">
+
+        <!-- QURAN VERSE -->
+        <section class="py-20 px-6 text-center bg-[#f5f1ea] reveal">
+            <div class="max-w-2xl mx-auto">
+                <p class="font-Display text-3xl md:text-4xl italic mb-6 text-[#8b7355]">Ar-Rum: 21</p>
+                <p class="text-sm md:text-base leading-relaxed text-gray-700 mb-4">
+                    "Dan di antara tanda-tanda kekuasaan-Nya diciptakan-Nya untukmu pasangan hidup dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya, dan dijadikan-Nya diantaramu rasa kasih dan sayang."
+                </p>
+            </div>
+        </section>
+
+        <!-- COUPLE SECTION -->
+        <section class="py-20 px-6 bg-white reveal">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-4xl md:text-5xl font-Display mb-2">Mempelai</h2>
+                <div class="w-20 h-[2px] bg-[#8b7355] mx-auto mb-12"></div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <!-- Bride -->
+                    <div class="flex flex-col items-center">
+                        <div class="w-48 h-48 md:w-64 md:h-64 rounded-full overflow-hidden mb-6 shadow-lg border-4 border-[#f5f1ea]">
+                            <img src="wanita.jpg" alt="Cahya Putri Kirana" class="w-full h-full object-cover">
+                        </div>
+                        <h3 class="text-3xl md:text-4xl font-Display mb-1">Cahya Putri Kirana</h3>
+                        <p class="text-[#8b7355] italic mb-4">"Kirana"</p>
+                        <p class="text-sm text-gray-600 mb-1">Putri dari</p>
+                        <p class="font-medium text-gray-800">Bapak Ahmad Zailani</p>
+                        <p class="font-medium text-gray-800">& Ibu Marry Putri</p>
+                    </div>
+
+                    <!-- Groom -->
+                    <div class="flex flex-col items-center">
+                        <div class="w-48 h-48 md:w-64 md:h-64 rounded-full overflow-hidden mb-6 shadow-lg border-4 border-[#f5f1ea]">
+                            <img src="pria.jpg" alt="Muhammad Azka Ridzik" class="w-full h-full object-cover">
+                        </div>
+                        <h3 class="text-3xl md:text-4xl font-Display mb-1">Muhammad Azka Ridzik</h3>
+                        <p class="text-[#8b7355] italic mb-4">"Azka"</p>
+                        <p class="text-sm text-gray-600 mb-1">Putra dari</p>
+                        <p class="font-medium text-gray-800">Bapak Rozak Shiddiq</p>
+                        <p class="font-medium text-gray-800">& Ibu Chintia Dewi</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VISUAL JOURNEY / GALLERY -->
+        <section class="py-20 px-6 bg-[#f5f1ea] reveal">
+            <div class="max-w-6xl mx-auto text-center mb-12">
+                <h2 class="text-4xl md:text-5xl font-Display mb-2">Visual Journey</h2>
+                <div class="w-20 h-[2px] bg-[#8b7355] mx-auto"></div>
+                <p class="mt-6 text-gray-600 font-light">Beberapa momen indah perjalanan kami</p>
+            </div>
+
+            <div class="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4">
+                <div class="gallery-item col-span-2 row-span-2 h-64 md:h-96 overflow-hidden">
+                    <img src="lamaran.jpg" class="w-full h-full object-cover" alt="Gallery 1">
+                </div>
+                <div class="gallery-item h-32 md:h-48 overflow-hidden">
+                    <img src="dinner.jpg" class="w-full h-full object-cover" alt="Gallery 2">
+                </div>
+                <div class="gallery-item h-32 md:h-48 overflow-hidden">
+                    <img src="date.jpg" class="w-full h-full object-cover" alt="Gallery 3">
+                </div>
+                <div class="gallery-item h-32 md:h-48 overflow-hidden">
+                    <img src="wisuda.jpg" class="w-full h-full object-cover" alt="Gallery 4">
+                </div>
+                <div class="gallery-item h-32 md:h-48 overflow-hidden">
+                    <img src="jalan.jpg" class="w-full h-full object-cover" alt="Gallery 5">
+                </div>
+            </div>
+        </section>
+
+        <!-- EVENT DETAILS -->
+        <section class="py-20 px-6 bg-white reveal">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-4xl md:text-5xl font-Display mb-2">Save The Date</h2>
+                <div class="w-20 h-[2px] bg-[#8b7355] mx-auto mb-12"></div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <!-- Wedding -->
+                    <div class="border border-gray-100 p-8 shadow-sm hover:shadow-lg transition-shadow duration-500 bg-[#fdfbf7]">
+                        <i class="fas fa-ring text-[#8b7355] text-3xl mb-4"></i>
+                        <h3 class="text-2xl font-Display mb-4">Akad Nikah</h3>
+                        <p class="text-lg font-medium mb-1">Minggu, 26 Juli 2026</p>
+                        <p class="text-gray-600 mb-6">09.00 WITA - Selesai</p>
+                        <div class="w-12 h-[1px] bg-gray-300 mx-auto mb-6"></div>
+                        <p class="text-gray-700 text-sm">Gedung Serba Guna Banjarmasin</p>
+                    </div>
+
+                    <!-- Resepsi -->
+                    <div class="border border-gray-100 p-8 shadow-sm hover:shadow-lg transition-shadow duration-500 bg-[#fdfbf7]">
+                        <i class="fas fa-glass-cheers text-[#8b7355] text-3xl mb-4"></i>
+                        <h3 class="text-2xl font-Display mb-4">Resepsi</h3>
+                        <p class="text-lg font-medium mb-1">Sabtu, 25 Juli 2026</p>
+                        <p class="text-gray-600 mb-6">08.00 WITA - Selesai</p>
+                        <div class="w-12 h-[1px] bg-gray-300 mx-auto mb-6"></div>
+                        <p class="text-gray-700 text-sm">Gedung Serba Guna Banjarmasin</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- LOCATION / MAPS -->
+        <section class="py-20 px-6 bg-[#f5f1ea] reveal">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-4xl md:text-5xl font-Display mb-2">Lokasi Acara</h2>
+                <div class="w-20 h-[2px] bg-[#8b7355] mx-auto mb-12"></div>
+                
+                <div class="rounded-lg overflow-hidden shadow-xl border-4 border-white mb-8">
+                    <iframe 
+                        src="lokasi.png" 
+                        width="200%" 
+                        height="350" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+                
+                <a href="https://maps.app.goo.gl/VqinwR8eZF5UxRTS8" target="_blank" class="inline-block border border-[#8b7355] text-[#8b7355] px-8 py-3 text-sm uppercase tracking-widest hover:bg-[#8b7355] hover:text-white transition-all duration-500">
+                    <i class="fas fa-map-marker-alt mr-2"></i> Lihat di Google Maps
+                </a>
+            </div>
+        </section>
+
+        <!-- GIFT / BANK TRANSFER -->
+        <section class="py-20 px-6 bg-white reveal">
+            <div class="max-w-md mx-auto text-center">
+                <h2 class="text-4xl font-Display mb-2">Wedding Gift</h2>
+                <div class="w-20 h-[2px] bg-[#8b7355] mx-auto mb-6"></div>
+                <p class="text-gray-600 text-sm mb-8">Doa restu Anda merupakan karunia yang sangat berarti. Namun jika ingin memberikan tanda kasih, dapat melalui transfer berikut:</p>
+                
+                <div class="bg-[#f5f1ea] p-6 rounded-lg shadow-sm border border-gray-100">
+                    <p class="text-xs text-gray-500 uppercase mb-2">Bank BCA</p>
+                    <p class="text-3xl font-Display tracking-wider text-[#1a1a1a] mb-4">1234567890</p>
+                    <p class="text-gray-700 font-medium">a.n. Cahya Putri Kirana</p>
+                    
+                    <button onclick="copyToClipboard('1234567890')" class="mt-4 bg-[#1a1a1a] text-white px-4 py-2 text-xs uppercase tracking-widest hover:bg-[#8b7355] transition-colors">
+                        <i class="fas fa-copy mr-2"></i> Salin Nomor Rekening
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- RSVP & WHATSAPP WISHES -->
+        <section class="py-20 px-6 bg-[#f5f1ea] reveal">
+            <div class="max-w-md mx-auto text-center">
+                <h2 class="text-4xl font-Display mb-2">Ucapan & Konfirmasi</h2>
+                <div class="w-20 h-[2px] bg-[#8b7355] mx-auto mb-6"></div>
+                <p class="text-gray-600 text-sm mb-8">Kirimkan ucapan dan doa restu, serta konfirmasi kehadiran Anda secara langsung melalui WhatsApp kami.</p>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <!-- Konfirmasi Kehadiran WA -->
+                    <a href="https://wa.me/6281234567890?text=Halo%20Azka%20%26%20Kirana,%20saya%20ingin%20konfirmasi%20kehadiran.%0ANama:%20%0AJumlah%20Tamu:%20%0AKehadiran:%20(Hadir/Tidak%20Hadir)" target="_blank" class="bg-green-600 text-white py-4 px-4 rounded-lg flex flex-col items-center justify-center hover:bg-green-700 transition-colors">
+                        <i class="fab fa-whatsapp text-2xl mb-2"></i>
+                        <span class="text-sm font-medium">Konfirmasi Kehadiran</span>
+                    </a>
+
+                    <!-- Kirim Ucapan WA -->
+                    <a href="https://wa.me/6281234567890?text=Halo%20Azka%20%26%20Kirana,%20saya%20ingin%20mengucapkan:%20" target="_blank" class="bg-white text-green-600 border-2 border-green-600 py-4 px-4 rounded-lg flex flex-col items-center justify-center hover:bg-green-50 transition-colors">
+                        <i class="fas fa-comment-dots text-2xl mb-2"></i>
+                        <span class="text-sm font-medium">Kirim Ucapan</span>
+                    </a>
+                </div>
+                
+                <p class="mt-6 text-xs text-gray-500">*Pastikan aplikasi WhatsApp terpasang di perangkat Anda.</p>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="py-12 px-6 bg-[#1a1a1a] text-white text-center">
+            <p class="text-2xl md:text-4xl font-Display mb-4">Azka & Kirana</p>
+            <p class="text-sm text-gray-400 mb-6">Terima kasih atas doa dan kehadirannya.</p>
+            <p class="text-xs text-gray-500">Made with <i class="fas fa-heart text-red-500"></i> | 2026</p>
+        </footer>
+
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-black text-white px-6 py-3 rounded-full text-sm opacity-0 transition-opacity duration-300 pointer-events-none z-50">
+        Nomor rekening berhasil disalin!
+    </div>
+
+    <script>
+        // Buka Undangan
+        function openInvitation() {
+            document.getElementById('mainContent').classList.remove('hidden');
+            document.getElementById('cover').style.display = 'none';
+            window.scrollTo(0, 0);
+            toggleAudio(); // Auto play music saat undangan dibuka
+        }
+
+        // Audio Control
+        let isPlaying = false;
+        const audioBtn = document.getElementById('audioBtn');
+        const bgMusic = document.getElementById('bgMusic');
+
+        function toggleAudio() {
+            if (isPlaying) {
+                bgMusic.pause();
+                audioBtn.classList.remove('playing');
+                audioBtn.innerHTML = '<i class="fas fa-music"></i>';
+            } else {
+                bgMusic.play().catch(e => console.log("Autoplay blocked"));
+                audioBtn.classList.add('playing');
+                audioBtn.innerHTML = '<i class="fas fa-pause"></i>';
+            }
+            isPlaying = !isPlaying;
+        }
+
+        // Copy to Clipboard
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                const toast = document.getElementById('toast');
+                toast.style.opacity = '1';
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                }, 3000);
+            }, function(err) {
+                console.error('Could not copy text: ', err);
+            });
+        }
+
+        // Scroll Reveal Animation
+        const reveals = document.querySelectorAll('.reveal');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        reveals.forEach(reveal => {
+            observer.observe(reveal);
+        });
+
+        // Set Link WhatsApp Dinamis (Ganti 6281234567890 dengan nomor asli)
+        // Nomor ini bisa diubah sesuai kebutuhan
+    </script>
+</body>
+</html>
